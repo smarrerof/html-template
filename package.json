@@ -4,7 +4,8 @@
   "description": "Yet another html template with gulp support to create ./dist folder",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp watch"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,9 @@
     "gulp"
   ],
   "author": "Sergio Marrero",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.18.13",
+    "gulp": "^3.9.1"
+  }
 }
