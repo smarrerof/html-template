@@ -1,0 +1,20 @@
+{
+  "name": "html-template",
+  "version": "1.0.0",
+  "description": "Yet another html template with gulp support to create ./dist folder",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smarrerof/html-template"
+  },
+  "keywords": [
+    "html",
+    "template",
+    "gulp"
+  ],
+  "author": "Sergio Marrero",
+  "license": "ISC"
+}
