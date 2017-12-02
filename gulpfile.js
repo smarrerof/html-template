@@ -68,11 +68,6 @@ gulp.task('images', function() {
   .pipe(gulp.dest('dist/assets/images'))
 })
 
-gulp.task('static', function() {
-  return gulp.src('src/**/*.+(html)')
-  .pipe(gulp.dest('dist'))
-})
-
 gulp.task('minify', function(){
   return gulp.src('src/**/*.html')
     .pipe(useref())
@@ -83,4 +78,4 @@ gulp.task('minify', function(){
     .pipe(gulp.dest('dist'))
 });
 
-gulp.task('dist', ['fonts', 'images', 'static', 'minify']);
+gulp.task('dist', ['fonts', 'images', 'minify']);
