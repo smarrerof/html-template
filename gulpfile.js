@@ -1,17 +1,45 @@
-var gulp        = require('gulp');
-var browserSync = require('browser-sync').create();
-var sass        = require('gulp-sass');
-var useref      = require('gulp-useref');
-var gulpIf      = require('gulp-if');
-var uglify      = require('gulp-uglify');
-var cssnano     = require('gulp-cssnano');
+var gulp = require("gulp"),
+    sass = require("gulp-sass"),
+    useref = require('gulp-useref'),
+    gulpif = require('gulp-if'),
+    uglify = require('gulp-uglify'),
+    cssnano = require('gulp-cssnano'),
+    useref = require('gulp-useref'),
+    server = require("browser-sync").create();
 
 
+const paths = {
+  // developments
+  scss: {
+    src: 'src/assets/scss/*.scss',
+    dest: 'src/assets/css/'
+  },
+  // productions
+  fonts: {
+    src: 'src/assets/fonts/**/*',
+    dest: 'dist/assets/fonts/'
+  },
+  images: {
+    src: 'src/assets/images/**/*',
+    dest: 'dist/assets/images/'
+  },
+  scripts: {
+    src: 'src/assets/js/**/*.js',
+    dest: 'dist/assets/bundle'
+  },
+  styles: {
+    src: 'src/assets/css/**/*.css',
+    dest: 'dist/assets/bundle'
+  }
+};    
 
-gulp.task('hello', function() {
-  // For testing purposes
-  console.log('Hello world!');
-});
+
+// For testing purposes
+function hello(cb) {
+  //console.log('hello world!')
+  cb();
+}
+
 
 /*
 ______               _                                  _   
@@ -23,31 +51,31 @@ ______               _                                  _
                             | |                             
                             |_|
 */
+function reload(done) {
+  server.reload();
+  done();
+}
 
-// Static server + watching files
-gulp.task('serve', ['sass'], function() {
-  browserSync.init({
-    server: {
-      baseDir: "./src"
-    }
-  });
-
-  // Watchers
-  gulp.watch("src/assets/css/**/*.scss", ['sass']);
-  gulp.watch("src/**/*.html").on('change', browserSync.reload);
-});
-
-// Compile sass into CSS & auto-inject into browsers
-gulp.task('sass', function() {
-  return gulp.src("src/assets/css/**/*.scss")
+function generateStyles() {
+  return gulp
+    .src(paths.scss.src)
     .pipe(sass())
-    .pipe(gulp.dest("src/assets/css"))
-    .pipe(browserSync.stream());
-});
+    .pipe(gulp.dest(paths.scss.dest));
+}
 
-gulp.task('watch', ['serve'], function () {
-  // Other watchers
-});
+function serve(done) {
+  server.init({
+      server: {
+          baseDir: "./src"
+      }
+  });
+  done();
+}
+
+function watch() {
+  gulp.watch(paths.scss.src, gulp.series(generateStyles ,reload));
+  gulp.watch("src/*.html", reload);
+}
 
 
 /*
@@ -58,24 +86,27 @@ ______              _            _   _
 | |  | | | (_) | (_| | |_| | (__| |_| | (_) | | | |
 \_|  |_|  \___/ \__,_|\__,_|\___|\__|_|\___/|_| |_|
 */
-gulp.task('fonts', function() {
+function copyFonts() {
   return gulp.src('src/assets/fonts/**/*')
-  .pipe(gulp.dest('dist/assets/fonts'))
-})
+    .pipe(gulp.dest('dist/assets/fonts'));
+}
 
-gulp.task('images', function() {
+function copyImages() {
   return gulp.src('src/assets/images/**/*')
-  .pipe(gulp.dest('dist/assets/images'))
-})
+    .pipe(gulp.dest('dist/assets/images'));
+}
 
-gulp.task('minify', function(){
+function minify() {
   return gulp.src('src/**/*.html')
     .pipe(useref())
-    // Minifies only if it's a JavaScript file
-    .pipe(gulpIf('*.js', uglify()))
-    // Minifies only if it's a CSS file
-    .pipe(gulpIf('*.css', cssnano()))
-    .pipe(gulp.dest('dist'))
-});
+    .pipe(gulpif('*.css', cssnano()))
+    .pipe(gulpif('*.js', uglify()))
+    .pipe(gulp.dest('dist'));
+}
 
-gulp.task('dist', ['fonts', 'images', 'minify']);
+
+/* Export public functions */
+exports.hello = hello;
+
+exports.serve = gulp.series(generateStyles, serve, watch);
+exports.build = gulp.series(copyFonts, copyImages, generateStyles, minify);

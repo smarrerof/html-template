@@ -5,7 +5,7 @@ Yet another html template with gulp support to create ./dist folder
 ```
 $ git clone https://github.com/smarrerof/html-template
 $ cd html-template
-$ npm install
+$ npm install or $ npm install --unsafe-perm=true if you are using node 10.x
 ```
 
 For development purposes
@@ -13,7 +13,7 @@ For development purposes
 $ npm start
 ```
 
-To generate productive version
+To generate productive version (in 'dist' folder)
 ```
-$ npm run dist
+$ npm run build
 ```

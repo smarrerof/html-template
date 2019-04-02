@@ -1,0 +1,11 @@
+.container {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+
+  h1 {
+    color: #ccc;
+    letter-spacing: .2em;
+  }
+}
